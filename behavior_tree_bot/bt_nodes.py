@@ -10,7 +10,7 @@ def log_execution(fn):
         return result
     return logged_fn
 
-
+# Do not use the Node or Composite classes. These are abstract classes used for the other node types. 
 ############################### Base Classes ##################################
 class Node:
     def __init__(self):
