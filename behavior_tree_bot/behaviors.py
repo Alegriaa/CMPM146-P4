@@ -1,6 +1,15 @@
+"""
+Here is where you will implement your functions 
+for action nodes, typically issuing orders. 
+Each function should only take the game state as a parameter.  
+There are two actions already implemented here as examples: 
+attack_weakest_enemy_planet and spread_to_weakest_neutral_planet.
+
+"""
+
+from planet_wars import issue_order
 import sys
 sys.path.insert(0, '../')
-from planet_wars import issue_order
 
 
 def attack_weakest_enemy_planet(state):
@@ -9,10 +18,12 @@ def attack_weakest_enemy_planet(state):
         return False
 
     # (2) Find my strongest planet.
-    strongest_planet = max(state.my_planets(), key=lambda t: t.num_ships, default=None)
+    strongest_planet = max(
+        state.my_planets(), key=lambda t: t.num_ships, default=None)
 
     # (3) Find the weakest enemy planet.
-    weakest_planet = min(state.enemy_planets(), key=lambda t: t.num_ships, default=None)
+    weakest_planet = min(state.enemy_planets(),
+                         key=lambda t: t.num_ships, default=None)
 
     if not strongest_planet or not weakest_planet:
         # No legal source or destination
@@ -28,10 +39,12 @@ def spread_to_weakest_neutral_planet(state):
         return False
 
     # (2) Find my strongest planet.
-    strongest_planet = max(state.my_planets(), key=lambda p: p.num_ships, default=None)
+    strongest_planet = max(
+        state.my_planets(), key=lambda p: p.num_ships, default=None)
 
     # (3) Find the weakest neutral planet.
-    weakest_planet = min(state.neutral_planets(), key=lambda p: p.num_ships, default=None)
+    weakest_planet = min(state.neutral_planets(),
+                         key=lambda p: p.num_ships, default=None)
 
     if not strongest_planet or not weakest_planet:
         # No legal source or destination

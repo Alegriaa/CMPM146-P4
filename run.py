@@ -1,3 +1,7 @@
+# show_match  function  runs  a  match between two bots
+# then replays the match in an interface. test runs a match and 
+# reports the result in the terminal. 
+
 import subprocess
 import os, sys
 

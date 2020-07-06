@@ -1,6 +1,17 @@
 #!/usr/bin/env python
 #
 
+"""
+my_planets() - list of all planets owned by your bot
+neutral_planets() - list of all planets not owned
+enemy_planets() - list of all planets owned by the enemy
+not_my_planets() - list of all planets not owned by your bot
+my_fleets() - list of your bot’s fleets
+enemy_fleets() - list of enemy fleets
+distance(source_planet, destination_planet) - distance between two planets
+is_alive(player_id) - returns True if player owns any fleets or planets and False otherwise
+"""
+
 from math import ceil, sqrt
 from collections import namedtuple
 from sys import stdout
