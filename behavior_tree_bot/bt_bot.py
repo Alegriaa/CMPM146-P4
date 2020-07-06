@@ -32,12 +32,6 @@ def setup_behavior_tree():
     attack = Action(attack_weakest_enemy_planet)
     offensive_plan.child_nodes = [largest_fleet_check, attack]
 
-    flank_plan = Sequence(name='Flank')
-    largest_fleet_check = Check(have_largest_fleet)
-    flank_spread_action = Action(go_for_the_top_dog)
-    flank_attack = Action(attack_weakest_enemy_planet)
-    offensive_plan.child_nodes = [largest_fleet_check, attack]
-
     spread_sequence = Sequence(name='Spread Strategy')
     neutral_planet_check = Check(if_neutral_planet_available)
     spread_action = Action(spread_to_weakest_neutral_planet)

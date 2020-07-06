@@ -14,15 +14,15 @@ def attack_weakest_enemy_planet(state):
         state.my_planets(), key=lambda t: t.num_ships, default=None)
 
     # (3) Find the weakest enemy planet.
-    weakest_neutral_planet = min(state.enemy_planets(),
+    weakest_planet = min(state.enemy_planets(),
                          key=lambda t: t.num_ships, default=None)
 
-    if not strongest_planet or not weakest_neutral_planet:
+    if not strongest_planet or not weakest_planet:
         # No legal source or destination
         return False
     else:
         # (4) Send half the ships from my strongest planet to the weakest enemy planet.
-        return issue_order(state, strongest_planet.ID, weakest_neutral_planet.ID, strongest_planet.num_ships / 2)
+        return issue_order(state, strongest_planet.ID, weakest_planet.ID, strongest_planet.num_ships / 2)
 
 
 def spread_to_weakest_neutral_planet(state):
@@ -31,21 +31,21 @@ def spread_to_weakest_neutral_planet(state):
         return False
 
     # (2) Find my strongest planet.
-    my_strongest_planet = max(
+    strongest_planet = max(
         state.my_planets(), key=lambda p: p.num_ships, default=None)
 
     # (3) Find the weakest neutral planet.
-    weakest_neutral_planet = min(state.neutral_planets(),
+    weakest_planet = min(state.neutral_planets(),
                          key=lambda p: p.num_ships, default=None)
 
-    if not my_strongest_planet or not weakest_neutral_planet:
+    if not strongest_planet or not weakest_planet:
         # No legal source or destination
         return False
     else:
         # (4) Send half the ships from my strongest planet to the weakest enemy planet.
-        dist = state.distance(weakest_neutral_planet.ID, my_strongest_planet.ID)
+        dist = state.distance(weakest_planet.ID, strongest_planet.ID)
         if dist < 15:
-            return issue_order(state, my_strongest_planet.ID, weakest_neutral_planet.ID, weakest_neutral_planet.num_ships+1)
+            return issue_order(state, strongest_planet.ID, weakest_planet.ID, weakest_planet.num_ships+1)
         else:
             return False
 
@@ -54,22 +54,21 @@ def go_for_the_top_dog(state):
     if len(state.my_fleets()) >= 1:
         return False
 
-    my_strongest_planet = max(
+    strongest_planet = max(
         state.my_planets(), key=lambda p: p.num_ships, default=None)
 
-    neutral_planet_targets = [planet for planet in state.neutral_planets(
-    ) if planet.num_ships+1 < my_strongest_planet.num_ships]
+    potential_targets = [planet for planet in state.neutral_planets(
+    ) if planet.num_ships+1 < strongest_planet.num_ships]
+    target = max(potential_targets, key=lambda p: p.growth_rate, default=None)
 
-    target = max(neutral_planet_targets, key=lambda p: p.growth_rate, default=None)
-
-    if not my_strongest_planet or not target:
+    if not strongest_planet or not target:
 
         return False
     else:
 
-        dist = state.distance(target.ID, my_strongest_planet.ID)
+        dist = state.distance(target.ID, strongest_planet.ID)
         if dist < 15:
-            return issue_order(state, my_strongest_planet.ID, target.ID, target.num_ships+3)
+            return issue_order(state, strongest_planet.ID, target.ID, target.num_ships+1)
         else:
             return False
         return False
