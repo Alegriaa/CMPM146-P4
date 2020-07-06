@@ -1,4 +1,9 @@
-
+"""
+Here is where you will implement your functions 
+for state-based conditional checks. As with actions, 
+each  function  should  only  take  the  game  
+state  as  a  parameter. 
+"""
 
 def if_neutral_planet_available(state):
     return any(state.neutral_planets())

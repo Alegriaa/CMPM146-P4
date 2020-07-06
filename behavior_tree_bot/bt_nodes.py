@@ -45,6 +45,10 @@ class Composite(Node):
 
 
 ############################### Composite Nodes ##################################
+#Selector  -  a  branching  node  containing  an  ordered  list  of  child  nodes. 
+#  When  the selector node is executed, it will attempt executing its child nodes in 
+# order until one returns a success (True). Once a child returns a success, 
+# it skips the execution of the remaining child nodes. 
 class Selector(Composite):
     @log_execution
     def execute(self, state):
@@ -55,7 +59,10 @@ class Selector(Composite):
         else:  # for loop completed without success; return failure
             return False
 
-
+# Sequence  -  a  branching  node  containing  an  ordered  list  of  child  nodes.  
+# When  the sequence node is executed, it will attempt executing its child nodes 
+# in order until one returns a failure (False). Once a child returns a failure, 
+# the sequence is aborted. 
 class Sequence(Composite):
     @log_execution
     def execute(self, state):
@@ -68,6 +75,9 @@ class Sequence(Composite):
 
 
 ############################### Leaf Nodes ##################################
+# Check - a leaf node which contains a check function, i.e. 
+# a function which checks for a condition within the state. 
+# These function calls should not issue orders.
 class Check(Node):
     def __init__(self, check_function):
         self.check_function = check_function
@@ -79,7 +89,8 @@ class Check(Node):
     def __str__(self):
         return self.__class__.__name__ + ': ' + self.check_function.__name__
 
-
+# Action - a leaf node which contains an action function, 
+# typically issuing one or more orders.
 class Action(Node):
     def __init__(self, action_function):
         self.action_function = action_function
@@ -90,3 +101,8 @@ class Action(Node):
 
     def __str__(self):
         return self.__class__.__name__ + ': ' + self.action_function.__name__
+
+# Optional: Using the established classes, 
+# implement behavior tree nodes for Decorator types   
+# (such   as   Inverter/LoopUntilFailed/AlwaysSucceed/etc)  
+#  and/or   Random Selector. 
