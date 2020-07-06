@@ -6,25 +6,20 @@
 // starting point, or you can throw it out entirely and replace it with your
 // own.
 """
-from planet_wars import PlanetWars, finish_turn
-from behavior_tree_bot.bt_nodes import Selector, Sequence, Action, Check
-from behavior_tree_bot.checks import *
-from behavior_tree_bot.behaviors import *
-import logging
-import traceback
-import sys
-import os
-import inspect
-logging.basicConfig(
-    filename=__file__[:-3] + '.log', filemode='w', level=logging.DEBUG)
-currentdir = os.path.dirname(os.path.abspath(
-    inspect.getfile(inspect.currentframe())))
+import logging, traceback, sys, os, inspect
+logging.basicConfig(filename=__file__[:-3] +'.log', filemode='w', level=logging.DEBUG)
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 
+from behavior_tree_bot.behaviors import *
+from behavior_tree_bot.checks import *
+from behavior_tree_bot.bt_nodes import Selector, Sequence, Action, Check
+from planet_wars import PlanetWars, finish_turn
 
 # You have to improve this tree or create an entire new one that is capable
 # of winning against all the 5 opponent bots
+
 
 def setup_behavior_tree():
 
@@ -33,21 +28,24 @@ def setup_behavior_tree():
 
     offensive_plan = Sequence(name='Offensive Strategy')
     largest_fleet_check = Check(have_largest_fleet)
+    spread_biggest_action = Action(go_for_the_top_dog)
     attack = Action(attack_weakest_enemy_planet)
     offensive_plan.child_nodes = [largest_fleet_check, attack]
 
     spread_sequence = Sequence(name='Spread Strategy')
     neutral_planet_check = Check(if_neutral_planet_available)
     spread_action = Action(spread_to_weakest_neutral_planet)
-    spread_sequence.child_nodes = [neutral_planet_check, spread_action]
+    spread_sequence.child_nodes = [
+        neutral_planet_check, spread_biggest_action, spread_action]
 
-    root.child_nodes = [offensive_plan, spread_sequence, attack.copy()]
+    attack_order = Action(tactical_assault)
+    spread_order = Action(spread_to_weakest_neutral_planet)
+
+    root.child_nodes = [offensive_plan,
+                        spread_sequence, attack_order, spread_order]
 
     logging.info('\n' + root.tree_to_string())
     return root
-# Useful:  Each  node  type  contains  a  copy()  method  which
-# returns  a  copy  of  the  node.  If  the node is composite,
-# it recursively copies the entire subtree for reuse.
 
 # You don't need to change this function
 
